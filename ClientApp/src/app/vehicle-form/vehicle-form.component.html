@@ -14,10 +14,19 @@
             <option value="{{ model.id }}" *ngFor="let model of models">{{ model.name }}</option>
         </select>
     </div>
+    <p>Is this vehicle registered?</p>
+    <div class="form-check form-check-inline">
+        <input type="radio" name="isRegistered" id="registered" value="true" class="form-check-input">
+        <label for="registered" class="form-check-label">Yes</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input type="radio" name="isRegistered" id="notRegistered" value="true" class="form-check-input">
+        <label for="registered" class="form-check-label">No</label>
+    </div>
     <h2>Features</h2>
-    <div *ngFor="let feature of features" class="checkbox">
-        <label for="feature{{ feature.id }}">
-            <input type="checkbox" id="{{ feature.id }}"> {{ feature.name }}
+    <div *ngFor="let feature of features" class="form-check">
+        <label for="feature{{ feature.id }}" class="form-check-label">
+            <input class="form-check-input" type="checkbox" id="{{ feature.id }}"> {{ feature.name }}
         </label>
     </div>
 </form>
