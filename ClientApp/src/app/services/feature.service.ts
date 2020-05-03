@@ -1,15 +1,15 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/internal//operators/map';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/internal/operators/map';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MakeService {
+export class FeatureService {
 
   constructor(private http: HttpClient) { }
 
-  getMakes() {
+  getFeatures() {
     return this.http.get<any>('/api/makes').pipe(
       map(response => response)
     );
