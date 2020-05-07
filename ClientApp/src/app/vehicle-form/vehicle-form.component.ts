@@ -11,6 +11,7 @@ export class VehicleFormComponent implements OnInit {
   models: any[];
   features: any[];
   vehicle: any = {
+    contact: {},
     features: []
   };
 
