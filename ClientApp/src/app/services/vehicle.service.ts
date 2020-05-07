@@ -16,7 +16,7 @@ export class VehicleService {
   }
 
   getFeatures() {
-    return this.http.get<any>('/api/makes').pipe(
+    return this.http.get<any>('/api/features').pipe(
       map(response => response)
     );
   }
