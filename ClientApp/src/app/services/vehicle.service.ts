@@ -20,4 +20,10 @@ export class VehicleService {
       map(response => response)
     );
   }
+
+  create(vehicle) {
+    return this.http.post('/api/vehicles', vehicle).pipe(
+      map(response => response)
+    )
+  }
 }
