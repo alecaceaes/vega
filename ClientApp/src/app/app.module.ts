@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/browser";
 import { AppErrorHandler } from './app-error-handler';
 import { VehicleService } from './services/vehicle.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -14,6 +15,10 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
+
+Sentry.init({
+  dsn: "https://5825b3e5e2cf4318a6f485ebd97175dd@o389573.ingest.sentry.io/5227887"
+});
 
 @NgModule({
   declarations: [
