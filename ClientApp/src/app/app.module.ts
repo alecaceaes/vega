@@ -1,6 +1,7 @@
+import { AppErrorHandler } from './app-error-handler';
 import { VehicleService } from './services/vehicle.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -24,7 +25,9 @@ import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
     VehicleFormComponent
   ],
   imports: [
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      closeButton: true
+    }),
     ToastContainerModule,
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -38,6 +41,7 @@ import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
     ])
   ],
   providers: [
+    { provide: ErrorHandler, useClass: AppErrorHandler },
     VehicleService
   ],
   bootstrap: [AppComponent]
