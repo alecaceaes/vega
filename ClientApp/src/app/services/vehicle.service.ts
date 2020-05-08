@@ -39,4 +39,10 @@ export class VehicleService {
       map(response => response)
     )
   }
+
+  delete(id) {
+    return this.http.delete('/api/vehicles/' + id).pipe(
+      map(response => response)
+    )
+  }
 }
