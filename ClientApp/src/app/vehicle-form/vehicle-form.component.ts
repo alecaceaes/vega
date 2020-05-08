@@ -51,8 +51,11 @@ export class VehicleFormComponent implements OnInit {
       this.makes = data[0];
       this.features = data[1];
 
-      if (this.vehicle.id)
+      if (this.vehicle.id) {
         this.setVehicle(data[2]);
+        this.populateModels();
+      }
+        
     }, err => {
       if (err.status == 404)
         this.router.navigate(['/']);
@@ -69,9 +72,13 @@ export class VehicleFormComponent implements OnInit {
   }
 
   onMakeChange() {
+    this.populateModels();
+    delete this.vehicle.modelId;
+  }
+
+  private populateModels() {
     let selectedMake = this.makes.find(m => m.id == this.vehicle.makeId);
     this.models = selectedMake ? selectedMake.models : [];
-    delete this.vehicle.modelId;
   }
 
   onFeatureToggle(featureId, $event) {
