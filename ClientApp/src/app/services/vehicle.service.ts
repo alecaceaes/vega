@@ -1,3 +1,4 @@
+import { SaveVehicle } from './../models/vehicle';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/internal//operators/map';
@@ -29,6 +30,12 @@ export class VehicleService {
 
   getVehicle(id) {
     return this.http.get<any>('/api/vehicles/' + id).pipe(
+      map(response => response)
+    )
+  }
+
+  update(vehicle: SaveVehicle) {
+    return this.http.put('/api/vehicles/' + vehicle.id, vehicle).pipe(
       map(response => response)
     )
   }
