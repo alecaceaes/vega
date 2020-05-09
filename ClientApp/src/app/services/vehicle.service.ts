@@ -45,4 +45,10 @@ export class VehicleService {
       map(response => response)
     )
   }
+
+  getVehicles() {
+    return this.http.get<any>('/api/vehicles').pipe(
+      map(response => response)
+    );
+  }
 }
