@@ -7,7 +7,7 @@ import { map } from 'rxjs/internal//operators/map';
   providedIn: 'root'
 })
 export class VehicleService {
-
+  private readonly vehiclesEndpoint ='/api/vehicles';
   constructor(private http: HttpClient) { }
 
   getMakes() {
@@ -23,32 +23,43 @@ export class VehicleService {
   }
 
   create(vehicle) {
-    return this.http.post('/api/vehicles', vehicle).pipe(
+    return this.http.post(this.vehiclesEndpoint, vehicle).pipe(
       map(response => response)
     )
   }
 
   getVehicle(id) {
-    return this.http.get<any>('/api/vehicles/' + id).pipe(
+    return this.http.get<any>(this.vehiclesEndpoint + '/' + id).pipe(
       map(response => response)
     )
   }
 
   update(vehicle: SaveVehicle) {
-    return this.http.put('/api/vehicles/' + vehicle.id, vehicle).pipe(
+    return this.http.put(this.vehiclesEndpoint + '/' + vehicle.id, vehicle).pipe(
       map(response => response)
     )
   }
 
   delete(id) {
-    return this.http.delete('/api/vehicles/' + id).pipe(
+    return this.http.delete(this.vehiclesEndpoint + '/' + id).pipe(
       map(response => response)
     )
   }
 
-  getVehicles() {
-    return this.http.get<any>('/api/vehicles').pipe(
+  getVehicles(filter) {
+    return this.http.get<any>(this.vehiclesEndpoint + '?' + this.toQueryString(filter)).pipe(
       map(response => response)
     );
+  }
+
+  toQueryString(obj) {
+    var parts = [];
+    for (var property in obj) {
+      var value = obj[property];
+      if (value != null && value != undefined) 
+        parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));
+    }
+
+    return parts.join('&');
   }
 }
