@@ -10,7 +10,7 @@ import { Vehicle, KeyValuePair } from '../models/vehicle';
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
   makes: KeyValuePair[];
-  filter: any = {};
+  query: any = {};
 
   constructor(private VehicleService: VehicleService) { }
 
@@ -22,7 +22,7 @@ export class VehicleListComponent implements OnInit {
   }
 
   private populateVehicles() {
-    this.VehicleService.getVehicles(this.filter)
+    this.VehicleService.getVehicles(this.query)
       .subscribe(vehicles => this.vehicles = vehicles);
   }
 
@@ -31,7 +31,19 @@ export class VehicleListComponent implements OnInit {
   }
 
   resetFilter() {
-    this.filter = {};
+    this.query = {};
     this.onFilterChange();
+  }
+
+  sortBy(columnName) {
+    if (this.query.sortBy == columnName) {
+      this.query.isSortAscending = false;
+    } 
+    else {
+      this.query.sortBy = columnName;
+      this.query.isSortAscending = true;
+    }    
+
+    this.populateVehicles();
   }
 }
