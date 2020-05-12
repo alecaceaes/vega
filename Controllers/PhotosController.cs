@@ -27,10 +27,9 @@ namespace vega.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(int vehicleId, IFormFile file)
+        public async Task<IActionResult> Upload(int vehicleId, [FromForm] IFormFile file)
         {
             var vehicle = await repository.GetVehicle(vehicleId, includeRelated: false);
-
             if (vehicle == null)
                 return NotFound();
 
@@ -44,7 +43,7 @@ namespace vega.Controllers
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
-            }
+            };
 
             var photo = new Photo { FileName = fileName };
             vehicle.Photos.Add(photo);
