@@ -17,6 +17,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
+import { ViewVehicleComponent } from './view-vehicle/view-vehicle.component';
 
 Sentry.init({
   dsn: "https://5825b3e5e2cf4318a6f485ebd97175dd@o389573.ingest.sentry.io/5227887"
@@ -31,7 +32,8 @@ Sentry.init({
     FetchDataComponent,
     VehicleFormComponent,
     VehicleListComponent,
-    PaginationComponent
+    PaginationComponent,
+    ViewVehicleComponent
   ],
   imports: [
     ToastrModule.forRoot({
@@ -45,7 +47,8 @@ Sentry.init({
     RouterModule.forRoot([
       { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
       { path: 'vehicles/new', component: VehicleFormComponent },
-      { path: 'vehicles/:id', component: VehicleFormComponent },
+      { path: 'vehicles/edit/:id', component: VehicleFormComponent },
+      { path: 'vehicles/:id', component: ViewVehicleComponent },
       { path: 'vehicles', component: VehicleListComponent },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
