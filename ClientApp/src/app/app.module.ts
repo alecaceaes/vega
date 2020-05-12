@@ -1,3 +1,4 @@
+import { PhotoService } from './services/photo.service';
 import { PaginationComponent } from './shared/pagination.component';
 import * as Sentry from "@sentry/browser";
 import { AppErrorHandler } from './app-error-handler';
@@ -56,7 +57,8 @@ Sentry.init({
   ],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler },
-    VehicleService
+    VehicleService,
+    PhotoService
   ],
   bootstrap: [AppComponent]
 })
