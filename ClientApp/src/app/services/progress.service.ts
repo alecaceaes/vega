@@ -5,8 +5,23 @@ import { map } from 'rxjs/internal/operators/map';
 
 @Injectable()
 export class ProgressService {
-  uploadProgress: Subject<any> = new Subject();
-  downloadProgress: Subject<any> = new Subject();
+  private uploadProgress: Subject<any>;
+
+  startTracking() { 
+    this.uploadProgress = new Subject();
+    return this.uploadProgress;
+  }
+
+  notify(progress) {
+    this.uploadProgress.next(progress);
+  }
+
+  endTracking() {
+    setTimeout(() => {
+      if(this.uploadProgress)
+        this.uploadProgress.complete();
+    }, 1500);    
+  }
 }
 
 @Injectable()
@@ -33,11 +48,11 @@ export class BrowserXhrWithProgress implements HttpInterceptor {
 
   private getEventMessage(event: HttpEvent<any>) {
     switch (event.type) {
-      case HttpEventType.DownloadProgress:
-        this.service.downloadProgress.next(this.createProgress(event));
-  
       case HttpEventType.UploadProgress:
-        this.service.uploadProgress.next(this.createProgress(event));
+        this.service.notify(this.createProgress(event));
+  
+      case HttpEventType.Response:
+        this.service.endTracking();               
     }
   }
 }

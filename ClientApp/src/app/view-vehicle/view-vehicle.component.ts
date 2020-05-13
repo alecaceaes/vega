@@ -18,7 +18,6 @@ export class ViewVehicleComponent implements OnInit {
   vehicleId: number;
   photos: any[];
   progress: any;
-  uploadProgress: Subject<any>;
 
   constructor(
     // private zone: NgZone,
@@ -62,10 +61,9 @@ export class ViewVehicleComponent implements OnInit {
   }
 
   uploadPhoto() {
-    var nativeElement: HTMLInputElement = this.fileInput.nativeElement;    
-    this.uploadProgress = this.progressService.uploadProgress;
-    
-    this.uploadProgress.subscribe(progress => {
+    var nativeElement: HTMLInputElement = this.fileInput.nativeElement;   
+
+    this.progressService.startTracking().subscribe(progress => {
         console.log(progress)
         // this.zone.run(() => {
           this.progress = progress;
@@ -81,7 +79,7 @@ export class ViewVehicleComponent implements OnInit {
   }
 
   cancelUpload() {
-    this.uploadProgress.unsubscribe();
+    // this.uploadingProgress.unsubscribe();
     this.progress = null;
   }
 }
