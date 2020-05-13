@@ -6,7 +6,7 @@ import { VehicleService } from './services/vehicle.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
@@ -19,6 +19,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { ViewVehicleComponent } from './view-vehicle/view-vehicle.component';
+import { ProgressService, BrowserXhrWithProgress } from './services/progress.service';
 
 Sentry.init({
   dsn: "https://5825b3e5e2cf4318a6f485ebd97175dd@o389573.ingest.sentry.io/5227887"
@@ -57,8 +58,10 @@ Sentry.init({
   ],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler },
+    { provide: HTTP_INTERCEPTORS, useClass: BrowserXhrWithProgress, multi: true },
     VehicleService,
-    PhotoService
+    PhotoService,
+    ProgressService
   ],
   bootstrap: [AppComponent]
 })

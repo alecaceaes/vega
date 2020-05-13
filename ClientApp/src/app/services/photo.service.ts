@@ -12,7 +12,7 @@ export class PhotoService {
   upload(vehicleId, photo) {
     var formData = new FormData();
     formData.append('file', photo);
-    return this.http.post(`/api/vehicles/${vehicleId}/photos`, formData).pipe(
+    return this.http.post(`/api/vehicles/${vehicleId}/photos`, formData, { reportProgress: true }).pipe(
       map(res => res)
     )
   }
