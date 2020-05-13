@@ -40,6 +40,12 @@
         <div role="tabpanel" class="tab-pane" id="photos" aria-labelledby="photos-tab">
             <h2>Photos</h2>
             <input type="file" (change)="uploadPhoto()" #fileInput> 
+            <div class="progress" *ngIf="progress && progress.percentage < 100">
+                <div class="progress-bar" [style.width]="progress.percentage + '%'">
+                    <span class="sr-only">{{ progress.percentage }}%</span>
+                </div>
+            </div>
+            <button type="button" class="btn btn-danger" (click)="cancelUpload()" *ngIf="progress && progress.percentage < 100">Cancel</button>
             <img *ngFor="let photo of photos" src="/uploads/{{ photo.fileName }}" class="img-thumbnail">
         </div>
     </div>

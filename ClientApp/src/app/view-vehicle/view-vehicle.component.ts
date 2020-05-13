@@ -1,3 +1,5 @@
+import { Observable, Subject } from 'rxjs';
+import { NgZone } from '@angular/core';
 import { VehicleService } from './../services/vehicle.service';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
@@ -15,8 +17,11 @@ export class ViewVehicleComponent implements OnInit {
   vehicle: any;
   vehicleId: number;
   photos: any[];
+  progress: any;
+  uploadProgress: Subject<any>;
 
   constructor(
+    // private zone: NgZone,
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService,
@@ -57,14 +62,26 @@ export class ViewVehicleComponent implements OnInit {
   }
 
   uploadPhoto() {
-    var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
-
-    this.progressService.uploadProgress
-      .subscribe(progress => console.log(progress));
+    var nativeElement: HTMLInputElement = this.fileInput.nativeElement;    
+    this.uploadProgress = this.progressService.uploadProgress;
+    
+    this.uploadProgress.subscribe(progress => {
+        console.log(progress)
+        // this.zone.run(() => {
+          this.progress = progress;
+        // })        
+      },
+      null,
+      () => {this.progress = null;});
 
     this.photoService.upload(this.vehicleId, nativeElement.files[0])
       .subscribe(photo => {
         this.photos.push(photo);
       });
+  }
+
+  cancelUpload() {
+    this.uploadProgress.unsubscribe();
+    this.progress = null;
   }
 }
