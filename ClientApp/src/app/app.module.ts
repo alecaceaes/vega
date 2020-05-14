@@ -1,3 +1,4 @@
+import { AuthService } from './services/auth.service';
 import { PhotoService } from './services/photo.service';
 import { PaginationComponent } from './shared/pagination.component';
 import * as Sentry from "@sentry/browser";
@@ -61,7 +62,8 @@ Sentry.init({
     { provide: HTTP_INTERCEPTORS, useClass: BrowserXhrWithProgress, multi: true },
     VehicleService,
     PhotoService,
-    ProgressService
+    ProgressService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })
