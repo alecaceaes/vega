@@ -21,6 +21,7 @@ import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { ViewVehicleComponent } from './view-vehicle/view-vehicle.component';
 import { ProgressService, BrowserXhrWithProgress } from './services/progress.service';
+import { AdminComponent } from './admin/admin.component';
 
 Sentry.init({
   dsn: "https://5825b3e5e2cf4318a6f485ebd97175dd@o389573.ingest.sentry.io/5227887"
@@ -36,7 +37,8 @@ Sentry.init({
     VehicleFormComponent,
     VehicleListComponent,
     PaginationComponent,
-    ViewVehicleComponent
+    ViewVehicleComponent,
+    AdminComponent
   ],
   imports: [
     ToastrModule.forRoot({
@@ -53,6 +55,7 @@ Sentry.init({
       { path: 'vehicles/edit/:id', component: VehicleFormComponent },
       { path: 'vehicles/:id', component: ViewVehicleComponent },
       { path: 'vehicles', component: VehicleListComponent },
+      { path: 'admin', component: AdminComponent },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
     ])

@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
+  private roles: string[] = [];
   // Create an observable of Auth0 instance of client
   auth0Client$ = (from(
     createAuth0Client({
@@ -50,7 +51,11 @@ export class AuthService {
   getUser$(options?): Observable<any> {
     return this.auth0Client$.pipe(
       concatMap((client: Auth0Client) => from(client.getUser(options))),
-      tap(user => this.userProfileSubject$.next(user))
+      tap(user => {      
+        this.roles = user["https://vega-dev.com/roles"];
+        delete user["https://vega-dev.com/roles"];
+        this.userProfileSubject$.next(user)
+      })
     );
   }
 
@@ -120,7 +125,11 @@ export class AuthService {
         client_id: "rvtE5KGA3V720ReGqNWa8AdK746OW87P",
         returnTo: `${window.location.origin}`
       });
+      this.roles = [];
     });
   }
 
+  public isInRole(roleName) {
+    return this.roles.indexOf(roleName) > -1;
+  }
 }
