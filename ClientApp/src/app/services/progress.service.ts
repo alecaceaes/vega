@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpEventType, HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/internal/operators/map';
-import { ToastrService } from 'ngx-toastr';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpEventType } from '@angular/common/http';
 
 @Injectable()
 export class ProgressService {
@@ -14,7 +12,8 @@ export class ProgressService {
   }
 
   notify(progress) {
-    this.uploadProgress.next(progress);
+    if (this.uploadProgress)
+     this.uploadProgress.next(progress);
   }
 
   endTracking() {
@@ -27,7 +26,7 @@ export class ProgressService {
 
 @Injectable()
 export class BrowserXhrWithProgress implements HttpInterceptor {
-  constructor(private service: ProgressService, private http: HttpClient, private toastr: ToastrService) { }
+  constructor(private service: ProgressService) {  }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return Observable.create((observer) => {

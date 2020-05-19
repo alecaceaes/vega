@@ -4,7 +4,7 @@ import { VehicleService } from '../services/vehicle.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin } from 'rxjs/';
+import { forkJoin, combineLatest } from 'rxjs/';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -47,7 +47,7 @@ export class VehicleFormComponent implements OnInit {
     if (this.vehicle.id)
       sources.push(this.vehicleService.getVehicle(this.vehicle.id))
 
-    forkJoin(sources).subscribe(data => {
+    combineLatest(sources).subscribe(data => {
       this.makes = data[0];
       this.features = data[1];
 

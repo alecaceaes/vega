@@ -1,15 +1,18 @@
-import { Observable, Subject } from 'rxjs';
 import { NgZone } from '@angular/core';
 import { VehicleService } from './../services/vehicle.service';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhotoService } from '../services/photo.service';
-import { ProgressService } from '../services/progress.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BrowserXhrWithProgress, ProgressService } from '../services/progress.service';
 
 @Component({
-  selector: 'app-view-vehicle',
   templateUrl: './view-vehicle.component.html',
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: BrowserXhrWithProgress, multi: true },
+    ProgressService,
+  ],
   styleUrls: ['./view-vehicle.component.css']
 })
 export class ViewVehicleComponent implements OnInit {
@@ -62,7 +65,6 @@ export class ViewVehicleComponent implements OnInit {
 
   uploadPhoto() {
     this.progressService.startTracking().subscribe(progress => {
-        console.log(progress)
         // this.zone.run(() => {
           this.progress = progress;
         // })        

@@ -15,7 +15,9 @@ export class AuthService {
     createAuth0Client({
       domain: "vega-dev.auth0.com",
       client_id: "rvtE5KGA3V720ReGqNWa8AdK746OW87P",
-      redirect_uri: `${window.location.origin}`
+      redirect_uri: `${window.location.origin}`,
+      audience: "https://api.vega-dev.com",
+      responseType: 'token'
     })
   ) as Observable<Auth0Client>).pipe(
     shareReplay(1), // Every subscription receives the same shared value
@@ -37,6 +39,9 @@ export class AuthService {
   userProfile$ = this.userProfileSubject$.asObservable();
   // Create a local property for login status
   loggedIn: boolean = null;
+
+  // custom
+  private idTokenClaims$ = new BehaviorSubject<any>(null);
 
   constructor(private router: Router) {
     // On initial load, check authentication state with authorization server
@@ -131,5 +136,11 @@ export class AuthService {
 
   public isInRole(roleName) {
     return this.roles.indexOf(roleName) > -1;
+  }
+
+  getTokenSilently$(options?): Observable<string> {
+    return this.auth0Client$.pipe(
+      concatMap((client: Auth0Client) => from(client.getTokenSilently(options)))
+    );
   }
 }

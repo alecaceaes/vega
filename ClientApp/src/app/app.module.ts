@@ -1,3 +1,4 @@
+import { InterceptorService } from './services/interceptor.service';
 import { AuthService } from './services/auth.service';
 import { PhotoService } from './services/photo.service';
 import { PaginationComponent } from './shared/pagination.component';
@@ -20,7 +21,6 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { ViewVehicleComponent } from './view-vehicle/view-vehicle.component';
-import { ProgressService, BrowserXhrWithProgress } from './services/progress.service';
 import { AdminComponent } from './admin/admin.component';
 import { AdminAuthGuard } from './services/admin-auth.guard';
 
@@ -62,12 +62,11 @@ Sentry.init({
     ])
   ],
   providers: [
-    { provide: ErrorHandler, useClass: AppErrorHandler },
-    { provide: HTTP_INTERCEPTORS, useClass: BrowserXhrWithProgress, multi: true },
+    { provide: ErrorHandler, useClass: AppErrorHandler },    
     VehicleService,
     PhotoService,
-    ProgressService,
-    AuthService
+    AuthService,
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
   ],
   bootstrap: [AppComponent]
 })
