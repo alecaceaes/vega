@@ -4,15 +4,10 @@ import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhotoService } from '../services/photo.service';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BrowserXhrWithProgress, ProgressService } from '../services/progress.service';
+import { ProgressService } from '../services/progress.service';
 
 @Component({
   templateUrl: './view-vehicle.component.html',
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: BrowserXhrWithProgress, multi: true },
-    ProgressService,
-  ],
   styleUrls: ['./view-vehicle.component.css']
 })
 export class ViewVehicleComponent implements OnInit {
@@ -23,7 +18,6 @@ export class ViewVehicleComponent implements OnInit {
   progress: any;
 
   constructor(
-    // private zone: NgZone,
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService,
@@ -65,12 +59,13 @@ export class ViewVehicleComponent implements OnInit {
 
   uploadPhoto() {
     this.progressService.startTracking().subscribe(progress => {
-        // this.zone.run(() => {
-          this.progress = progress;
-        // })        
+      console.log("progress", progress)        
+          this.progress = progress;               
       },
       null,
-      () => {this.progress = null;});
+      () => {        
+        this.progress = null;
+      });
 
     var nativeElement: HTMLInputElement = this.fileInput.nativeElement;  
     var file = nativeElement.files[0];

@@ -23,6 +23,7 @@ import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { ViewVehicleComponent } from './view-vehicle/view-vehicle.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminAuthGuard } from './services/admin-auth.guard';
+import { BrowserXhrWithProgress, ProgressService } from './services/progress.service';
 
 Sentry.init({
   dsn: "https://5825b3e5e2cf4318a6f485ebd97175dd@o389573.ingest.sentry.io/5227887"
@@ -66,7 +67,9 @@ Sentry.init({
     VehicleService,
     PhotoService,
     AuthService,
-    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: BrowserXhrWithProgress, multi: true },
+    ProgressService,     
   ],
   bootstrap: [AppComponent]
 })

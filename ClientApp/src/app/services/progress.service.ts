@@ -12,24 +12,23 @@ export class ProgressService {
   }
 
   notify(progress) {
-    if (this.uploadProgress)
-     this.uploadProgress.next(progress);
+    this.uploadProgress.next(progress);
+      
   }
 
   endTracking() {
-    setTimeout(() => {
-      if(this.uploadProgress)
-        this.uploadProgress.complete();
-    }, 1500);    
+    if(this.uploadProgress)
+      this.uploadProgress.complete();  
   }
 }
 
 @Injectable()
 export class BrowserXhrWithProgress implements HttpInterceptor {
   constructor(private service: ProgressService) {  }
-
+  
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return Observable.create((observer) => {
+    if (req.reportProgress) {
+      return Observable.create((observer) => {
         next.handle(req).subscribe(
           event => {
             this.getEventMessage(event);
@@ -39,7 +38,11 @@ export class BrowserXhrWithProgress implements HttpInterceptor {
             observer.error(err);
           }
         )
-    });
+      });
+    } 
+    else {
+      return next.handle(req);
+    }    
   }
 
   private createProgress(event) {
@@ -53,9 +56,10 @@ export class BrowserXhrWithProgress implements HttpInterceptor {
     switch (event.type) {
       case HttpEventType.UploadProgress:
         this.service.notify(this.createProgress(event));
-  
+        break;
       case HttpEventType.Response:
-        this.service.endTracking();               
+        this.service.endTracking();  
+        break;             
     }
   }
 }
