@@ -1,3 +1,4 @@
+import { ChartModule } from 'angular2-chartjs';
 import { InterceptorService } from './services/interceptor.service';
 import { AuthService } from './services/auth.service';
 import { PhotoService } from './services/photo.service';
@@ -48,6 +49,7 @@ Sentry.init({
       closeButton: true
     }),
     ToastContainerModule,
+    ChartModule,
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
