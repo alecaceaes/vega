@@ -19,16 +19,16 @@ namespace vega.Controllers
     {
         private readonly IWebHostEnvironment host;
         private readonly IVehicleRepository vehicleRepository;
-        private readonly IUnitOfWork unitOfWork;
         private readonly PhotoSettings photoSettings;
         private readonly IMapper mapper;
         private readonly IPhotoRepository photoRepository;
-        public PhotosController(IWebHostEnvironment host, IVehicleRepository vehicleRepository, IPhotoRepository photoRepository, IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<PhotoSettings> options)
+        private readonly IPhotoService photoService;
+        public PhotosController(IWebHostEnvironment host, IVehicleRepository vehicleRepository, IPhotoRepository photoRepository, IMapper mapper, IOptionsSnapshot<PhotoSettings> options, IPhotoService photoService)
         {
+            this.photoService = photoService;
             this.photoRepository = photoRepository;
             this.photoSettings = options.Value;
             this.mapper = mapper;
-            this.unitOfWork = unitOfWork;
             this.vehicleRepository = vehicleRepository;
             this.host = host;
         }
@@ -48,33 +48,13 @@ namespace vega.Controllers
             if (vehicle == null)
                 return NotFound();
 
-            if (file == null)
-                return BadRequest("Null file.");
-
-            if (file.Length == 0)
-                return BadRequest("Empty file.");
-
-            if (file.Length > photoSettings.MaxBytes)
-                return BadRequest("Maximum file size exceeded.");
-
-            if (!photoSettings.IsSupported(file.FileName))
-                return BadRequest("Invalid file type.");
+            if (file == null) return BadRequest("Null file.");
+            if (file.Length == 0) return BadRequest("Empty file.");
+            if (file.Length > photoSettings.MaxBytes) return BadRequest("Maximum file size exceeded.");
+            if (!photoSettings.IsSupported(file.FileName)) return BadRequest("Invalid file type.");
 
             var uploadsFolderPath = Path.Combine(host.WebRootPath, "uploads");
-            if (!Directory.Exists(uploadsFolderPath))
-                Directory.CreateDirectory(uploadsFolderPath);
-
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            var filePath = Path.Combine(uploadsFolderPath, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            };
-
-            var photo = new Photo { FileName = fileName };
-            vehicle.Photos.Add(photo);
-            await unitOfWork.CompleteAsync();
+            var photo = await photoService.UploadPhoto(vehicle, file, uploadsFolderPath);
 
             return Ok(mapper.Map<Photo, PhotoResource>(photo));
         }
