@@ -1,4 +1,4 @@
-import { NgZone } from '@angular/core';
+import { AuthService } from './../services/auth.service';
 import { VehicleService } from './../services/vehicle.service';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
@@ -18,6 +18,7 @@ export class ViewVehicleComponent implements OnInit {
   progress: any;
 
   constructor(
+    private auth: AuthService,
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService,
