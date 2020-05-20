@@ -13,7 +13,15 @@ namespace vega
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).ConfigureAppConfiguration((hostContext, builder) =>
+            {
+                // Add other providers for JSON, etc.
+                if (hostContext.HostingEnvironment.IsDevelopment())
+                {
+                    builder.AddUserSecrets<Startup>();
+                }
+            })
+            .Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
