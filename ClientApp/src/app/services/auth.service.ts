@@ -57,7 +57,7 @@ export class AuthService {
     return this.auth0Client$.pipe(
       concatMap((client: Auth0Client) => from(client.getUser(options))),
       tap(user => {      
-        this.roles = user["https://vega-dev.com/roles"];
+        this.roles = user["https://vega-dev.com/roles"] || [];
         delete user["https://vega-dev.com/roles"];
         this.userProfileSubject$.next(user)
       })
